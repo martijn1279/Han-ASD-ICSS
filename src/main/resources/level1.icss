@@ -1,0 +1,19 @@
+LINKCOLOR := #ff0000;
+PARWIDTH := 500px;
+
+p {
+	background-color: #ffffff;
+	width: PARWIDTH;
+}
+
+a {
+	color: LINKCOLOR;
+}
+
+#menu {
+	width: 520px;
+}
+
+.menu {
+	color: #000000;
+}
