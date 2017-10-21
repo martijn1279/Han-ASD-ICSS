@@ -11,8 +11,31 @@ stylerule: (selector STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY
 
 selector: ((SELECTOR_ELEEMNT | SELECTOR_ID) | SELECTOR_CLASS);
 
-selectorconditionpart: selectorcondition* | selectorcondition* CONDITIONSPLIT selectorcondition*;
-selectorcondition: constantreference | (value CONDITIONOPERATOR_GREATERTHEN value) | (value CONDITIONOPERATOR_SMALLERTHEN value);
+selectorconditionpart: expression EOF*; //| selectorcondition* CONDITIONSPLIT selectorcondition*;
+//selectorcondition: constantreference | (value CONDITIONOPERATOR_GREATERTHEN value) | (value CONDITIONOPERATOR_SMALLERTHEN value);
+
+
+expression
+ : LPAREN expression RPAREN                       #parenExpression
+ | NOT expression                                 #notExpression
+ | left=expression op=comparator right=expression #comparatorExpression
+ | left=expression op=binary right=expression     #binaryExpression
+ | bool                                           #boolExpression
+ | IDENTIFIER                                     #identifierExpression
+ | DECIMAL                                        #decimalExpression
+ ;
+
+comparator
+ : GT | GE | LT | LE | EQ
+ ;
+
+binary
+ : AND | OR
+ ;
+
+bool
+ : TRUE | FALSE
+ ;
 
 declerationpart: decleration | stylerule;
 decleration: attribute ATTRIBUTE_VALUE_SEPERATOR value LINEEND;
@@ -68,3 +91,18 @@ CALCOPERATOR_DEV: '/';
 CONDITIONSPLIT: '||';
 CONDITIONOPERATOR_GREATERTHEN: '>';
 CONDITIONOPERATOR_SMALLERTHEN: '<';
+
+AND        : 'AND' ;
+OR         : 'OR' ;
+NOT        : 'NOT';
+TRUE       : 'TRUE' ;
+FALSE      : 'FALSE' ;
+GT         : '>' ;
+GE         : '>=' ;
+LT         : '<' ;
+LE         : '<=' ;
+EQ         : '=' ;
+LPAREN     : '(' ;
+RPAREN     : ')' ;
+DECIMAL    : '-'? [0-9]+ ( '.' [0-9]+ )? ;
+IDENTIFIER : [a-zA-Z_] [a-zA-Z_0-9]* ;

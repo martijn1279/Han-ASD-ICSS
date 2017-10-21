@@ -4,12 +4,12 @@ stylesheet: stylesheetpart*;
 
 stylesheetpart: constantassignment | stylerule;
 
-stylerule: (selector STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY) | (selector STYLERULE_OPEN_BRACKETS selectorconditionpart STYLERULE_CLOSE_BRACKETS STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY) ;
+stylerule: (selector STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY) | (selector STYLERULE_OPEN_BRACKETS selectorconditionpart* STYLERULE_CLOSE_BRACKETS STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY);
 
 selector: ((SELECTOR_ELEEMNT | SELECTOR_ID) | SELECTOR_CLASS);
 
-selectorconditionpart: selectorcondition* | selectorcondition* CONDITIONSPLIT selectorcondition*;
-selectorcondition: constantreference | (value CONDITIONOPERATOR_GREATERTHEN value) | (value CONDITIONOPERATOR_SMALLERTHEN value);
+selectorconditionpart: selectorcondition+ | selectorcondition+ conditionsplit;
+selectorcondition: constantreference | (value CONDITIONOPERATOR_GREATERTHEN value) | (value CONDITIONOPERATOR_SMALLERTHEN value) ;
 
 declerationpart: decleration | stylerule;
 decleration: attribute ATTRIBUTE_VALUE_SEPERATOR value LINEEND;
@@ -27,6 +27,8 @@ calcoperator: CALCOPERATOR_ADD | CALCOPERATOR_SUB | CALCOPERATOR_MUL | CALCOPERA
 constantreference: CONSTANT_NAME;
 
 constantassignment: constantreference CONSTANT_ASSIGNMENT_SEPERATOR literal LINEEND;
+
+conditionsplit: CONDITIONSPLIT;
 
 WS: [ \t\r\n]+ -> skip;
 

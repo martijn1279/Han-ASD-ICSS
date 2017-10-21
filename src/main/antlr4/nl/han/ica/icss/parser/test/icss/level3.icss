@@ -6,7 +6,7 @@ p {
 	background-color: #ffffff;
 	width: PAR_WIDTH;
 }
-a [PAR_WIDTH > 200px ] {
+a [DEBUG || PAR_WIDTH > 200px ] {
 	color: LINK_COLOR;
 }
 
