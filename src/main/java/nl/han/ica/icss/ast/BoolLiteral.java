@@ -13,4 +13,6 @@ public class BoolLiteral extends Literal {
     public String getNodeLabel() {
         return "Bool literal (" + (this.value ? "true" : "false") + ")";
     }
+
+
 }

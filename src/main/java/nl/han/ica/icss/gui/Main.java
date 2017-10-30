@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import nl.han.ica.icss.ast.AST;
 import nl.han.ica.icss.checker.Checker;
-import nl.han.ica.icss.checker.errors.SemanticError;
+import nl.han.ica.icss.checker.SemanticError;
 import nl.han.ica.icss.generator.Generator;
 import nl.han.ica.icss.parser.ASTListener;
 import nl.han.ica.icss.parser.ICSSLexer;
@@ -270,8 +270,9 @@ public class Main extends Application implements ANTLRErrorListener {
             feedbackPane.addLine("Applying transformations...");
 
             //These are the transformations you need to implement
-            new EliminateOptionals().apply(ast);
             new EvalExpressions().apply(ast);
+            new EliminateOptionals().apply(ast);
+
             //Update the AST Pane
             astPane.update(this.ast);
 

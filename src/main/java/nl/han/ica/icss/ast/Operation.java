@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 public class Operation extends Expression {
 
-    public static enum Operator {PLUS, MIN, OR, AND, EQ, LT, GT};
-
     public Operator operator;
+
     public Expression lhs;
     public Expression rhs;
 
@@ -25,10 +24,12 @@ public class Operation extends Expression {
 
     @Override
     public void addChild(ASTNode child) {
-        if(lhs == null) {
+        if (lhs == null) {
             lhs = (Expression) child;
-        } else if(rhs == null) {
+        } else if (rhs == null) {
             rhs = (Expression) child;
         }
     }
+
+    public static enum Operator {PLUS, MIN, DIV, MUL, OR, AND, EQ, LW, GT}
 }

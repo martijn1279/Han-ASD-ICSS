@@ -25,4 +25,5 @@ public class Declaration extends ASTNode {
 	public void addChild(ASTNode child) {
 		expression = (Expression) child;
 	}
+
 }

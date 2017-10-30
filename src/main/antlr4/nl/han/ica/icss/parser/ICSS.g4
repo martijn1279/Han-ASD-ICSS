@@ -1,58 +1,38 @@
 grammar ICSS;
 
-@header{package nl.han.ica.icss.parser;
+@header{
+package nl.han.ica.icss.parser;
 }
 
-stylesheet: stylesheetpart*;
+stylesheet: stylesheetPart*;
 
-stylesheetpart: constantassignment | stylerule;
+stylesheetPart: assignment | stylerule;
 
-stylerule: (selector STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY) | (selector STYLERULE_OPEN_BRACKETS selectorconditionpart STYLERULE_CLOSE_BRACKETS STYLERULE_OPEN_CURLY declerationpart* STYLERULE_CLOSE_CURLY) ;
-
-selector: ((SELECTOR_ELEEMNT | SELECTOR_ID) | SELECTOR_CLASS);
-
-selectorconditionpart: expression EOF*; //| selectorcondition* CONDITIONSPLIT selectorcondition*;
-//selectorcondition: constantreference | (value CONDITIONOPERATOR_GREATERTHEN value) | (value CONDITIONOPERATOR_SMALLERTHEN value);
+stylerule:  (selector statement? STYLERULE_OPEN_CURLY declaration+ STYLERULE_CLOSE_CURLY);
 
 
-expression
- : LPAREN expression RPAREN                       #parenExpression
- | NOT expression                                 #notExpression
- | left=expression op=comparator right=expression #comparatorExpression
- | left=expression op=binary right=expression     #binaryExpression
- | bool                                           #boolExpression
- | IDENTIFIER                                     #identifierExpression
- | DECIMAL                                        #decimalExpression
- ;
+selector: ((SELECTOR_TAG | SELECTOR_ID) | SELECTOR_CLASS);
 
-comparator
- : GT | GE | LT | LE | EQ
- ;
+statement: STYLERULE_OPEN_BRACKETS  expression additionalExpression*  STYLERULE_CLOSE_BRACKETS;
+additionalExpression: logicalOperator expression;
 
-binary
- : AND | OR
- ;
 
-bool
- : TRUE | FALSE
- ;
+declaration: ATTRIBUTES ATTRIBUTE_VALUE_SEPERATOR expression LINE_END;
 
-declerationpart: decleration | stylerule;
-decleration: attribute ATTRIBUTE_VALUE_SEPERATOR value LINEEND;
+expression: operation| value;
+operation: value (operator value);
+value: (literal | variableReference);
 
-attribute: ATTRIBUTE_COLOR | ATTRIBUTE_BACKGROUND_COLOR | ATTRIBUTE_WIDTH | ATTRIBUTE_HEIGHT;
+operator: calcOperator | relationalOperator;
+calcOperator: CALC_OPERATOR_ADD | CALC_OPERATOR_SUB | CALC_OPERATOR_DIV | CALC_OPERATOR_MUL;
+relationalOperator: CONDITION_OPERATOR_GT | CONDITION_OPERATOR_LW | CONDITION_OPERATOR_EQ;
+logicalOperator: (CONDITION_OPERATOR_OR | CONDITION_OPERATOR_AND);
 
-value: realvalue | som;
-som: realvalue (calcoperator realvalue)+;
-realvalue: (literal | constantreference);
+literal: LITERAL_COLOR | LITERAL_PIXELS | LITERAL_PERCENTAGE | LITERAL_BOOL;
 
-literal: LITERAL_COLOR | LITERAL_PIXELS | LITERAL_PERCENTAGE | LITERAL_TRUE | LITERAL_FALSE;
+variableReference: CONSTANT_NAME;
 
-calcoperator: CALCOPERATOR_ADD | CALCOPERATOR_SUB | CALCOPERATOR_MUL | CALCOPERATOR_DEV;
-
-constantreference: CONSTANT_NAME;
-
-constantassignment: constantreference CONSTANT_ASSIGNMENT_SEPERATOR literal LINEEND;
+assignment: variableReference CONSTANT_ASSIGNMENT_SEPERATOR expression LINE_END;
 
 WS: [ \t\r\n]+ -> skip;
 
@@ -61,48 +41,33 @@ STYLERULE_CLOSE_CURLY: '}';
 STYLERULE_OPEN_BRACKETS:  '[';
 STYLERULE_CLOSE_BRACKETS: ']';
 
-LINEEND: ';';
+LINE_END: ';';
 
-ATTRIBUTE_COLOR: 'color';
-ATTRIBUTE_BACKGROUND_COLOR: 'background-color';
-ATTRIBUTE_WIDTH: 'width';
-ATTRIBUTE_HEIGHT: 'height';
+ATTRIBUTES: 'color' | 'background-color' | 'width' | 'height';
 
 ATTRIBUTE_VALUE_SEPERATOR: ':';
 
 LITERAL_COLOR: '#'[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f];
 LITERAL_PIXELS: [0-9]+'px';
 LITERAL_PERCENTAGE: [0-9]+'%';
-LITERAL_TRUE: 'true';
-LITERAL_FALSE: 'false';
+LITERAL_BOOL: 'true' | 'false';
 
 SELECTOR_ID: '#'[a-z0-9_]+;
 SELECTOR_CLASS: '.'[a-z0-9_]+;
-SELECTOR_ELEEMNT: [a-z0-9_]+;
+SELECTOR_TAG: [a-z0-9_]+;
 
 CONSTANT_NAME: [A-Z0-9_]+;
 CONSTANT_ASSIGNMENT_SEPERATOR: ':=';
 
-CALCOPERATOR_ADD: '+';
-CALCOPERATOR_SUB: '-';
-CALCOPERATOR_MUL: '*';
-CALCOPERATOR_DEV: '/';
+CALC_OPERATOR_ADD:'+' ;
+CALC_OPERATOR_SUB: '-';
+CALC_OPERATOR_DIV:'*';
+CALC_OPERATOR_MUL:'/';
 
-CONDITIONSPLIT: '||';
-CONDITIONOPERATOR_GREATERTHEN: '>';
-CONDITIONOPERATOR_SMALLERTHEN: '<';
 
-AND        : 'AND' ;
-OR         : 'OR' ;
-NOT        : 'NOT';
-TRUE       : 'TRUE' ;
-FALSE      : 'FALSE' ;
-GT         : '>' ;
-GE         : '>=' ;
-LT         : '<' ;
-LE         : '<=' ;
-EQ         : '=' ;
-LPAREN     : '(' ;
-RPAREN     : ')' ;
-DECIMAL    : '-'? [0-9]+ ( '.' [0-9]+ )? ;
-IDENTIFIER : [a-zA-Z_] [a-zA-Z_0-9]* ;
+CONDITION_OPERATOR_OR:'||';
+CONDITION_OPERATOR_AND:'&&' ;
+CONDITION_OPERATOR_GT:'>';
+CONDITION_OPERATOR_LW:'<';
+CONDITION_OPERATOR_EQ: '==';
+

@@ -1,7 +1,5 @@
 package nl.han.ica.icss.ast;
 
-import nl.han.ica.icss.checker.SemanticError;
-
 import java.util.ArrayList;
 
 /**
@@ -34,12 +32,5 @@ public class Stylesheet extends ASTNode {
 	@Override
 	public void removeChild(ASTNode child) {
 		body.remove(child);
-	}
-
-	@Override
-	public String toString() {
-		return "Stylesheet{" +
-				"body=" + body +
-				'}';
 	}
 }

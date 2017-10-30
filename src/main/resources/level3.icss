@@ -11,7 +11,7 @@ a [DEBUG || PAR_WIDTH > 200px ] {
 }
 
 #menu {
-	width: PAR_WIDTH + 20px + 10%;
+	width: PAR_WIDTH + 20px;
 }
 
 .menu {
