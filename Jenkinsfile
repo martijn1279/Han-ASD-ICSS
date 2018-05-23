@@ -12,7 +12,7 @@ pipeline {
             
         }
         stage('Promotion') {
-            input('Deploy to Production?')
+            input 'Deploy to Production?'
         }
         stage('test') {
             steps {
