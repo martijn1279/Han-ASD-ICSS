@@ -9,7 +9,8 @@ pipeline {
                     ls -lah
                 '''
             }
-            stage('Example') {
+        }
+        stage('Example') {
             input {
                 message "Should we continue?"
                 ok "Yes, we should."
