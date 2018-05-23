@@ -11,6 +11,9 @@ pipeline {
             }
             
         }
+        stage 'Promotion' {
+            input 'Deploy to Production?'
+        }
         stage('test') {
             steps {
                 sh 'echo "Hello World"'
