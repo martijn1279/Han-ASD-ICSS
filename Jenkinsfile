@@ -9,7 +9,7 @@ pipeline {
                     ls -lah
                 '''
             }
-            input message: "Approve build?" submitter: "admin_group"
+            input message: "Approve build?"
         }
         stage('test') {
             steps {
