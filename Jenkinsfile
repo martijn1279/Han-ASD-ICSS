@@ -9,6 +9,7 @@ pipeline {
                     ls -lah
                 '''
             }
+            milestone()
         }
         stage('test') {
             steps {
