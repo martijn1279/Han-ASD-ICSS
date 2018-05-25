@@ -9,6 +9,8 @@ pipeline {
                     ls -lah
                 '''
                 milestone()
+                input message: "Proceed?"
+                milestone()
             }
         }
         stage('test') {
