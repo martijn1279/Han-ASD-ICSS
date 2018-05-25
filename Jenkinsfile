@@ -8,8 +8,8 @@ pipeline {
                     echo "Multiline shell steps works too"
                     ls -lah
                 '''
+                milestone()
             }
-            milestone()
         }
         stage('test') {
             steps {
