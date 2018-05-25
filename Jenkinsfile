@@ -5,7 +5,6 @@ pipeline {
       agent any
       steps {
         echo "Building"
-        stash includes: 'path/to/things/*', name: 'my-files'
       }
     }
     stage("Checkpoint") {
@@ -17,7 +16,6 @@ pipeline {
     stage("Deploy") {
       agent any
       steps {
-        unstash 'my-files'
         sh 'deploy.sh'
       }
     }
