@@ -7,16 +7,13 @@ pipeline {
         echo "Building"
       }
     }
-    stage("Checkpoint") {
-      agent none
-      steps {
-        checkpoint 'Completed Build'
-      }
+    timeout(time:5, unit:'DAYS') {
+        input message:'Approve deployment?', submitter: 'it-ops'
     }
     stage("Deploy") {
       agent any
       steps {
-        sh 'deploy.sh'
+        echo "Building"
       }
     }
   }
